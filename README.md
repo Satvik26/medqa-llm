@@ -123,7 +123,7 @@ flowchart LR
 **Laptop (CPU): analysis, retrieval, tests**
 
 ```bash
-git clone https://github.com/<you>/medqa-llm && cd medqa-llm
+git clone https://github.com/Satvik26/medqa-llm && cd medqa-llm
 make setup-mac          # uv sync --extra analysis --extra rag --extra eval --extra demo
 make test               # about 40 fast CPU tests
 make analysis           # data split, EDA, clustering, embeddings -> runs/analysis/

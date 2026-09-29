@@ -5,21 +5,21 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 *.egg-info/
-dist/
-build/
+/dist/
+/build/
 
 # Data and run artifacts (large, regenerable, or on the HF Hub)
-data/
-runs/
-outputs/
-wandb/
+/data/
+/runs/
+/outputs/
+/wandb/
 *.safetensors
 *.bin
 *.gguf
 *.wav
 
 # Original 26 MB course notebook; a stripped copy lives in notebooks/archive/
-Refer/
+/Refer/
 
 # Editors / OS
 .DS_Store
