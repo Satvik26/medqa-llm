@@ -1,0 +1,13 @@
+model,fine_tuned,cosine_similarity,bertscore_precision,bertscore_recall,bertscore_f1,seconds_per_answer
+Mistral-7B,true,0.820,0.924,0.913,0.918,4.613
+Llama-3-8B,true,0.813,0.882,0.910,0.882,3.809
+Gemma-7B,true,0.811,0.926,0.911,0.918,4.391
+TinyLlama-1.1B,true,0.783,0.919,0.895,0.906,2.435
+GPT-2,true,0.727,0.892,0.889,0.890,30.094
+Mistral-7B,false,0.726,0.837,0.871,0.853,7.330
+Llama-3-8B,false,0.694,0.838,0.856,0.848,4.370
+GPT-2,false,0.630,0.591,0.713,0.639,31.160
+Gemma-7B,false,0.556,0.799,0.843,0.819,9.198
+BioBERT,true,0.326,0.830,0.803,0.816,1.230
+BioBERT,false,0.322,0.808,0.792,0.800,1.667
+TinyLlama-1.1B,false,0.315,0.762,0.804,0.782,6.451

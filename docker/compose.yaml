@@ -1,0 +1,35 @@
+# Full demo stack on an NVIDIA host: vLLM model server + Gradio UI.
+#   ADAPTER_DIR=runs/qwen3-1.7b-qlora/adapter docker compose -f docker/compose.yaml up --build
+services:
+  vllm:
+    build:
+      context: ..
+      dockerfile: docker/serve.Dockerfile
+    environment:
+      BASE_MODEL: ${BASE_MODEL:-unsloth/Qwen3-1.7B}
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - ../${ADAPTER_DIR:-runs/qwen3-1.7b-qlora/adapter}:/adapter:ro
+      - hf-cache:/root/.cache/huggingface
+    ports: ["8000:8000"]
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: 1, capabilities: [gpu] }]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      retries: 40
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/app.Dockerfile
+    ports: ["7860:7860"]
+    depends_on:
+      vllm:
+        condition: service_healthy
+
+volumes:
+  hf-cache:

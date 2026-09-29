@@ -1,0 +1,17 @@
+# RAFT: Qwen3-1.7B fine-tuned with retrieved passages in the prompt.
+# Prerequisites: `medqa rag build-index` then `medqa rag build-data`.
+base: base.yaml
+run_name: qwen3-1.7b-raft
+
+model:
+  display_name: Qwen3-1.7B + RAFT
+  max_seq_length: 1536
+
+data:
+  rag: true
+  rag_top_k: 3
+
+training:
+  # Retrieved passages make prompts ~3x longer than closed-book ones.
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 8

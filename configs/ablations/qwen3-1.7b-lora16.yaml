@@ -1,0 +1,9 @@
+# Quantization ablation: plain LoRA on 16-bit weights instead of QLoRA on 4-bit weights.
+# Compare peak VRAM, seconds per step and answer quality with runs/qwen3-1.7b-qlora.
+base: ../base.yaml
+run_name: qwen3-1.7b-lora16
+
+model:
+  display_name: Qwen3-1.7B (LoRA, 16-bit base)
+  base_model: unsloth/Qwen3-1.7B
+  load_in_4bit: false

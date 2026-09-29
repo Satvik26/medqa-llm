@@ -1,0 +1,9 @@
+base: ../base.yaml
+run_name: llama3.2-1b-qlora
+
+model:
+  display_name: Llama-3.2-1B
+  base_model: unsloth/Llama-3.2-1B-Instruct-unsloth-bnb-4bit
+
+serve:
+  base_model: unsloth/Llama-3.2-1B-Instruct

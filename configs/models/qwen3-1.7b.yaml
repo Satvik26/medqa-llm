@@ -1,0 +1,9 @@
+base: ../base.yaml
+run_name: qwen3-1.7b-qlora
+
+model:
+  display_name: Qwen3-1.7B
+  base_model: unsloth/Qwen3-1.7B-unsloth-bnb-4bit
+
+serve:
+  base_model: unsloth/Qwen3-1.7B

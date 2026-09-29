@@ -1,0 +1,14 @@
+base: ../base.yaml
+run_name: smollm3-3b-qlora
+
+model:
+  display_name: SmolLM3-3B
+  base_model: unsloth/SmolLM3-3B-unsloth-bnb-4bit
+
+training:
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 8
+
+serve:
+  base_model: unsloth/SmolLM3-3B
+  gpu_memory_utilization: 0.7

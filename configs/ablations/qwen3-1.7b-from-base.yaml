@@ -1,0 +1,11 @@
+# Base vs instruct ablation: start from the pretrained-only checkpoint instead of the instruct one.
+# The pretrained model never learned to follow chat turns, so fine-tuning must teach format and content.
+base: ../base.yaml
+run_name: qwen3-1.7b-base-qlora
+
+model:
+  display_name: Qwen3-1.7B-Base (pretrained only)
+  base_model: unsloth/Qwen3-1.7B-Base-unsloth-bnb-4bit
+
+serve:
+  base_model: unsloth/Qwen3-1.7B-Base

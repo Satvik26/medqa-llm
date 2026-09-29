@@ -1,0 +1,23 @@
+# Frontier reference model, zero-shot through any OpenAI-compatible API.
+# OpenAI: base_url https://api.openai.com/v1, key OPENAI_API_KEY.
+# Anthropic / Google / OpenRouter also expose OpenAI-compatible endpoints; change the three api fields.
+base: base.yaml
+run_name: frontier-zero-shot
+
+model:
+  display_name: GPT-5 (frontier)
+
+api:
+  base_url: https://api.openai.com/v1
+  model: gpt-5
+  api_key_env: OPENAI_API_KEY
+  max_concurrency: 8
+  max_tokens: 2048
+  max_tokens_param: max_completion_tokens
+  temperature: null
+  extra_body:
+    reasoning_effort: low
+
+eval:
+  # Paid API: a fixed 1,000-question sample of the test split keeps cost low.
+  limit: 1000

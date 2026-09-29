@@ -1,0 +1,18 @@
+base: ../base.yaml
+run_name: qwen3-8b-qlora
+
+model:
+  display_name: Qwen3-8B
+  base_model: unsloth/Qwen3-8B-unsloth-bnb-4bit
+
+training:
+  # Same effective batch (32) with a micro-batch that fits 16 GB.
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 16
+  num_train_epochs: 1
+
+serve:
+  # 16 GB of fp16 weights would not fit a T4, so vLLM serves the 4-bit checkpoint.
+  base_model: unsloth/Qwen3-8B-unsloth-bnb-4bit
+  quantization: bitsandbytes
+  gpu_memory_utilization: 0.85

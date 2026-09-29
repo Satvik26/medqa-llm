@@ -1,0 +1,70 @@
+# Shared defaults. Other configs set `base: <relative path to this file>` and override what differs.
+run_name: base
+output_root: runs
+
+data:
+  dataset: medalpaca/medical_meadow_medical_flashcards
+  split_dir: data/splits
+  test_size: 0.2
+  val_size: 0.05
+  seed: 42
+  rag: false
+  rag_top_k: 3
+  index_dir: runs/index
+
+model:
+  display_name: Qwen3-1.7B
+  # 4-bit pre-quantized weights for QLoRA training.
+  base_model: unsloth/Qwen3-1.7B-unsloth-bnb-4bit
+  max_seq_length: 512
+  load_in_4bit: true
+  lora:
+    r: 32
+    alpha: 32
+    dropout: 0.0
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+training:
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 4
+  num_train_epochs: 2
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  lr_scheduler_type: linear
+  optim: adamw_8bit
+  logging_steps: 10
+  save_steps: 100
+  eval_steps: 100
+  save_total_limit: 3
+  early_stopping_patience: 3
+  seed: 3407
+  report_to: tensorboard
+  push_to_hub: false
+  hub_model_id: null
+
+serve:
+  # 16-bit weights for vLLM; the LoRA adapter trained on the 4-bit base is applied on top.
+  base_model: unsloth/Qwen3-1.7B
+  dtype: half            # T4 (Turing) has no bfloat16
+  quantization: null     # e.g. bitsandbytes for 8B models
+  max_model_len: 2048
+  gpu_memory_utilization: 0.6
+  max_lora_rank: 32
+  host: 0.0.0.0
+  port: 8000
+  served_lora_name: medqa
+
+generation:
+  max_new_tokens: 128
+  temperature: 0.0
+  top_p: 1.0
+
+eval:
+  split: test
+  limit: null              # evaluate on the full split
+  checkpoint_sample: 200   # validation questions used to rank checkpoints
+  bertscore_model: roberta-large
+  semantic_model: NeuML/pubmedbert-base-embeddings
+
+api: null

@@ -1,0 +1,83 @@
+[project]
+name = "medqa"
+version = "0.1.0"
+description = "Fine-tuning, serving and benchmarking small open LLMs for medical question answering (QLoRA, RAFT, vLLM)."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Satvik Bisht" },
+    { name = "Alessandro Marcassa" },
+    { name = "Lorenzo Franzé" },
+    { name = "Teka Kimbi" },
+]
+keywords = ["nlp", "llm", "lora", "qlora", "vllm", "rag", "medical-qa", "unsloth"]
+dependencies = [
+    "datasets>=2.19",
+    "huggingface-hub>=0.23",
+    "matplotlib>=3.8",
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=15",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "rich>=13.7",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+# CPU analysis: runs on a laptop.
+analysis = [
+    "scikit-learn>=1.4",
+    "nltk>=3.8",
+    "gensim>=4.3.3",
+    "wordcloud>=1.9",
+    "seaborn>=0.13",
+    "plotly>=5.20",
+]
+# Hybrid retrieval index (BM25 + dense) for RAG / RAFT.
+rag = ["bm25s>=0.2", "sentence-transformers>=3.0"]
+# GPU fine-tuning (Linux + CUDA only, e.g. Lightning AI T4).
+train = [
+    "unsloth ; sys_platform == 'linux'",
+    "trl ; sys_platform == 'linux'",
+    "peft ; sys_platform == 'linux'",
+    "bitsandbytes ; sys_platform == 'linux'",
+    "tensorboard>=2.16",
+]
+# GPU inference server (Linux + CUDA only).
+serve = ["vllm>=0.6 ; sys_platform == 'linux'", "openai>=1.30"]
+# Answer-quality metrics.
+eval = ["bert-score>=0.3.13", "rouge-score>=0.1.2", "sentence-transformers>=3.0", "openai>=1.30"]
+# transformers + PEFT backend for running small models on CPU / Apple MPS.
+local = ["transformers>=4.43", "peft>=0.11", "torch>=2.2", "accelerate>=0.30"]
+demo = ["gradio>=4.36", "openai>=1.30"]
+voice = ["transformers>=4.43", "torch>=2.2", "librosa>=0.10", "soundfile>=0.12"]
+
+[project.scripts]
+medqa = "medqa.cli:app"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.5", "pre-commit>=3.7", "nbstripout>=0.7"]
+
+[build-system]
+requires = ["uv_build>=0.8,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv]
+environments = ["sys_platform == 'darwin'", "sys_platform == 'linux'"]
+# unsloth (via xformers) and vllm pin different torch builds, so they are resolved separately.
+conflicts = [[{ extra = "train" }, { extra = "serve" }]]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = ["notebooks", "Refer"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501", "RUF001", "RUF002", "RUF003"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
